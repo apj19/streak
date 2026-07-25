@@ -1,0 +1,35 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String   @id 
+  
+  // Clerk Authentication
+  email        String   @unique
+  
+  // Google Profile Data
+  name         String?
+  profileImage String?
+  
+  // for pusbick sharing url
+  username     String?  @default(dbgenerated("gen_random_uuid()::text"))
+  
+  // Timestamps
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Future Relations (Uncomment when you build these tables)
+  // logs      Log[]    // The daily learning updates they post
+  // skills    Skill[]  // The specific topics they are tracking
+}
