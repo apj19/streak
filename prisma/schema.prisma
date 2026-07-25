@@ -32,4 +32,24 @@ model User {
   // Future Relations (Uncomment when you build these tables)
   // logs      Log[]    // The daily learning updates they post
   // skills    Skill[]  // The specific topics they are tracking
+
+  blogs Blog[]
+}
+
+
+model Blog {
+  id          String   @id @default(cuid())
+  title       String  
+  content     String   @db.Text
+  tags        String[] 
+  
+  // isPublished Boolean  @default(true) // Defaulted to true so their logs appear on their feed instantly
+  
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([authorId])
 }

@@ -14,11 +14,25 @@ export default async function Header() {
       <div className="flex h-14 items-center justify-between px-2 max-w-7xl mx-auto w-full">
         {/* Left Side: Brand Heading */}
         <div className="flex items-center gap-2">
-          <Link href="/">
+          {/* <Link href="/">
             <span className="font-heading text-xl font-bold tracking-tight text-foreground">
               streak
             </span>
-          </Link>
+          </Link> */}
+
+          {userId ? (
+            <Link href="/home">
+              <span className="font-heading text-xl font-bold tracking-tight text-foreground">
+                streak
+              </span>
+            </Link>
+          ) : (
+            <Link href="/">
+              <span className="font-heading text-xl font-bold tracking-tight text-foreground">
+                streak
+              </span>
+            </Link>
+          )}
         </div>
 
         {/* Right Side: GitHub Icon, Auth Actions & Dark Mode Toggle */}
