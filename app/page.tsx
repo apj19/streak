@@ -2,8 +2,15 @@ import { Button } from "@/components/ui/button";
 // import { ModeToggle } from "@/components/ui/toggle";
 import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+  const user = await currentUser();
+  if (user) {
+    redirect("/home");
+  }
+
   return (
     <div className="flex  flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       {/* <h1>Hi</h1>

@@ -9,6 +9,7 @@ import { getTopFiveBloag } from "../action";
 import { blogCard } from "@/types/user";
 import { CopyLinkButton } from "@/components/copyLinkBtn";
 import InfiniteFeed from "@/components/InfiniteFeed";
+import { StreakActivity } from "@/components/streakActivity";
 
 export default async function Home() {
   const user = await currentUser();
@@ -48,6 +49,7 @@ export default async function Home() {
     // </div>
     <main className="max-w-2xl mx-auto p-8">
       {/* Header Section */}
+      <StreakActivity />
       <div className="flex flex-col items-center justify-between mb-12 border-b pb-6 gap-4">
         <h1 className="text-3xl font-heading">Current streak</h1>
         <CopyLinkButton userId={user.id} />
