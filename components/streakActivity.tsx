@@ -11,9 +11,9 @@ import { Badge } from "@/components/ui/badge";
 import { Flame, Trophy, TrendingUp } from "lucide-react";
 
 interface ActivityStreakData {
-  currentStreak?: number;
-  longestStreak?: number;
-  totalDays?: number;
+  currentStreak: number;
+  longestStreak: number;
+  totalDays: number;
   activityData?: boolean[][];
 }
 
@@ -141,74 +141,6 @@ export function StreakActivity({
       </div>
 
       {/* 12-Week Activity Heatmap */}
-      <Card className="mt-4">
-        <CardHeader>
-          <CardTitle className="text-base">12-Week Activity</CardTitle>
-          <CardDescription>
-            Green cells indicate activity, empty cells show no activity
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <div className="inline-block">
-              {/* Header with month labels */}
-              <div className="flex">
-                <div className="w-12" /> {/* Spacer for day labels column */}
-                <div className="flex gap-1">
-                  {monthLabels.map((month, i) => (
-                    <div
-                      key={i}
-                      className="w-7 h-6 flex items-center justify-center"
-                    >
-                      <span className="text-xs font-semibold text-muted-foreground">
-                        {month}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Heatmap grid with day labels */}
-              <div className="flex gap-2">
-                {/* Y-axis: Day labels */}
-                <div className="flex flex-col justify-start">
-                  {dayLabels.map((day, i) => (
-                    <div key={day} className="h-7 flex items-center pr-2">
-                      <span className="text-xs font-medium text-muted-foreground w-10">
-                        {day}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Activity grid */}
-                <div className="flex gap-1">
-                  {activity[0].map((_, weekIndex) => (
-                    <div key={weekIndex} className="flex flex-col gap-1">
-                      {activity.map((week, dayIndex) => {
-                        const isActive = week[weekIndex];
-                        return (
-                          <div
-                            key={`${dayIndex}-${weekIndex}`}
-                            className={`w-6 h-6 rounded-sm transition-colors ${
-                              isActive
-                                ? "bg-green-500 dark:bg-green-600 hover:bg-green-600 dark:hover:bg-green-700"
-                                : "bg-muted dark:bg-slate-800 hover:bg-muted-foreground/20"
-                            }`}
-                            title={`${dayLabels[dayIndex]} - Week ${weekIndex + 1}: ${isActive ? "Active" : "No activity"}`}
-                          />
-                        );
-                      })}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* X-axis labels (selected days) */}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

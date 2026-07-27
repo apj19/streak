@@ -1,5 +1,8 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Copy } from "lucide-react";
+
 export function CopyLinkButton({ userId }: { userId: string }) {
   const handleCopy = async () => {
     try {
@@ -15,11 +18,16 @@ export function CopyLinkButton({ userId }: { userId: string }) {
   };
 
   return (
-    <button
-      onClick={handleCopy}
-      className="text-sm font-medium border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-50 transition-colors w-fit"
-    >
-      Copy
-    </button>
+    // <button
+    //   onClick={handleCopy}
+    //   className="text-sm font-medium border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-50 transition-colors w-fit"
+    // >
+    //   Copy
+    // </button>
+
+    <Button className="group" onClick={handleCopy}>
+      Copy Share link
+      <Copy className="transition-transform duration-200 group-hover:translate-x-0.5" />
+    </Button>
   );
 }

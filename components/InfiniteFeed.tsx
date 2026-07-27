@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { fetchNextBlogs } from "@/app/action";
 import { blogCard } from "@/types/user";
 import BlogCard from "./blogCard";
+import { Loader2 } from "lucide-react";
 // Import your individual card component here
 // import BlogCard from './BlogCard';
 
@@ -73,8 +74,9 @@ export default function InfiniteFeed({
           <BlogCard
             key={log.id}
             title={log.title}
-            date={log.createdAt.toISOString()}
-            content={log.content}
+            date={log.createdAt}
+            blogId={log.id}
+            userid={userId}
           />
         </div>
       ))}
@@ -85,7 +87,10 @@ export default function InfiniteFeed({
         className="h-10 w-full flex items-center justify-center"
       >
         {isLoading && (
-          <span className="text-gray-500 text-sm">Loading more...</span>
+          <>
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            Loading..
+          </>
         )}
         {!hasMore && logs.length > 0 && (
           <span className="text-gray-400 text-sm">You've reached the end.</span>

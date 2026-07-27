@@ -5,7 +5,7 @@ import BlogCard from "@/components/blogCard";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRightIcon } from "lucide-react";
-import { getTopFiveBloag } from "../action";
+import { getStates, getTopFiveBloag } from "../action";
 import { blogCard } from "@/types/user";
 import { CopyLinkButton } from "@/components/copyLinkBtn";
 import InfiniteFeed from "@/components/InfiniteFeed";
@@ -37,6 +37,12 @@ export default async function Home() {
 
   const blogs: blogCard[] = await getTopFiveBloag(user.id);
   // console.log(blogs);
+  const states = (await getStates(user.id)) || {
+    currentStreak: 0,
+    longestStreak: 0,
+    totalDays: 0,
+    lastLogDate: null,
+  };
 
   return (
     // <div className="flex flex-col items-center justify-center flex-1 bg-zinc-50 dark:bg-black p-6">
@@ -47,31 +53,31 @@ export default async function Home() {
     //   </div> */}
     //   <BlogCard title="Akshay" date="july 25" content="fjkhsdkjgkjg" />
     // </div>
-    <main className="max-w-2xl mx-auto p-8">
+    <main className="max-w-2xl mx-auto p-8 ">
       {/* Header Section */}
-      <StreakActivity />
-      <div className="flex flex-col items-center justify-between mb-12 border-b pb-6 gap-4">
-        <h1 className="text-3xl font-heading">Current streak</h1>
-        <CopyLinkButton userId={user.id} />
-        <Link href="/home/new">
-          {" "}
-          <Button className="group">
-            Add Today Blog
-            <ArrowRightIcon className="transition-transform duration-200 group-hover:translate-x-0.5" />
-          </Button>
-        </Link>
+      <StreakActivity
+        currentStreak={states.currentStreak}
+        longestStreak={states.longestStreak}
+        totalDays={states.totalDays}
+      />
+
+      <div className="flex flex-col items-center justify-between my-12 border-b border-t py-6 gap-4">
+        <h3 className="text-2xl font-heading">What did you learn today?</h3>
+
+        <div className="flex gap-4">
+          <Link href="/home/new">
+            {" "}
+            <Button className="group">
+              Add Today's Learning
+              <ArrowRightIcon className="transition-transform duration-200 group-hover:translate-x-0.5" />
+            </Button>
+          </Link>
+          <CopyLinkButton userId={user.id} />
+        </div>
       </div>
 
       {/* Feed Section */}
-      <div className="flex flex-col gap-8">
-        {/* {blogs.map((e) => (
-          <BlogCard
-            key={e.id}
-            title={e.title}
-            date={e.createdAt.toISOString()}
-            content={e.content}
-          />
-        ))} */}
+      <div className="flex flex-col gap-8   pt-4 items-center  ">
         <InfiniteFeed userId={user.id} initialLogs={blogs} />
       </div>
     </main>

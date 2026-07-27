@@ -1,24 +1,39 @@
 interface blogCardProps {
   title: string;
-  date: string;
-  content: string;
+  date: Date;
+  blogId: string;
+  userid: string;
 }
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CircleFadingPlusIcon } from "lucide-react";
 
-export default function BlogCard({ title, date, content }: blogCardProps) {
+import Link from "next/link";
+
+export default async function BlogCard({
+  title,
+  date,
+  blogId,
+  userid,
+}: blogCardProps) {
+  let updatedDate = new Intl.DateTimeFormat("en-US", {
+    month: "long", // "short" for "Jul"
+    day: "numeric", // "2-digit" for "07"
+    year: "numeric",
+  }).format(date);
+
   return (
     <>
-      <Card className="w-full max-w-lg">
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-        </CardHeader>
-        <CardContent className="">
-          <p className="text-muted-foreground text-sm">{date}</p>
-          <p className="text-muted-foreground text-sm">{content}</p>
-        </CardContent>
-      </Card>
+      <Link href={`/view/${userid}/${blogId}`}>
+        <Card className="w-full max-w-lg md:min-w-xl">
+          <CardHeader>
+            <CardTitle>{title}</CardTitle>
+          </CardHeader>
+          <CardContent className="">
+            <p className="text-muted-foreground text-sm ">{updatedDate}</p>
+            {/* <p className="text-muted-foreground text-sm">{content}</p> */}
+          </CardContent>
+        </Card>
+      </Link>
     </>
   );
 }

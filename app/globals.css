@@ -132,3 +132,43 @@
     @apply font-sans;
   }
 }
+
+/* Tiptap Editor Styles (Compatible with Tailwind Light/Dark themes) */
+.tiptap {
+  h1 {
+    @apply text-4xl font-extrabold tracking-tight mt-6 mb-2;
+  }
+  h2 {
+    @apply text-3xl font-bold tracking-tight mt-5 mb-2;
+  }
+  h3 {
+    @apply text-2xl font-semibold tracking-tight mt-4 mb-2;
+  }
+  h4 {
+    @apply text-xl font-semibold tracking-tight mt-3 mb-1;
+  }
+  p {
+    @apply my-3 leading-7;
+  }
+  ul {
+    @apply list-disc pl-6 mb-4;
+  }
+  ol {
+    @apply list-decimal pl-6 mb-4;
+  }
+  li {
+    @apply mb-1;
+  }
+  code {
+    @apply bg-muted text-foreground px-1.5 py-0.5 rounded font-mono text-sm;
+  }
+  pre {
+    @apply bg-muted p-4 rounded-lg overflow-x-auto mb-4;
+    code {
+      @apply bg-transparent p-0 rounded-none text-inherit;
+    }
+  }
+  blockquote {
+    @apply border-l-4 border-border pl-4 italic text-muted-foreground mb-4;
+  }
+}

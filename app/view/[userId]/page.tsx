@@ -19,9 +19,9 @@ export default async function PublicProfilePage({
   // console.log(blogs);
 
   return (
-    <main className="max-w-2xl mx-auto p-8">
+    <main className="max-w-2xl mx-auto p-8 ">
       {/* Feed Section */}
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8 justify-center items-center">
         {/* {blogs.map((e) => (
           <BlogCard
             key={e.id}
