@@ -5,60 +5,129 @@ import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Field,
-  FieldError,
-  FieldLabel,
-  FieldLegend,
-  FieldSet,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
 
-import { Textarea } from "@/components/ui/textarea";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Suspense, useEffect } from "react";
+
 import {
   AlertCircle,
-  BookmarkIcon,
-  CheckCheckIcon,
   Flame,
   Loader2,
   MoveLeft,
   ShieldCheckIcon,
   TrashIcon,
-  Trophy,
 } from "lucide-react";
 // import { currentUser } from "@clerk/nextjs/server";
 // import { redirect } from "next/navigation";
-import { createPostAction } from "@/app/action";
+import {
+  createPostAction,
+  getBlogfromUserIdAndBlogId,
+  updatePost,
+} from "@/app/action";
 import { useAuth } from "@clerk/nextjs";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-
-import dynamic from "next/dynamic";
 import Confetti from "react-confetti";
 
 // const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
-
-import { useRef } from "react";
 import Link from "next/link";
 import { useState } from "react";
-import PublishedBlog from "@/components/PublishedBlog";
 import { MenuBar } from "@/components/MenuBar";
 
+import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { Skeleton } from "@/components/ui/skeleton";
+import { SkeletonCard } from "@/components/skletonloader";
+
 export default function NewSkillPage() {
+  const router = useRouter();
+  const { isLoaded, userId } = useAuth();
+  const loggedInuserId: string | null | undefined = userId;
+
   // const editorRef = useRef<EditorRef>(null);
+  const searchParams = useSearchParams();
+  // const logId = searchParams.get('logId');
+  // `/new?userId=${userid}&blogId=${blogId}`
+  const useridFromParms = searchParams.get("userId");
+  const blogIdFromParams = searchParams.get("blogId");
+  ////////////////////////////////////////////////////////
+  const [titleInitialValue, setTitleInitialValue] = useState("");
+  const [editorInitialValue, setEditorInitialValue] = useState(
+    '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Start writing your log..."}]}]}',
+  );
+
+  ///////////////////////////////////////
+  const [isLoadingInitialData, setIsLoadingInitialData] = useState(true);
+
+  const editMode = isLoaded && userId != null && userId === useridFromParms;
+  // const [editeMode, setEditMode] = useState(false);
+
+  // console.log(loggedInuserId);
+  // console.log(useridFromParms);
+  // console.log("blogId", blogIdFromParams);
+
+  useEffect(() => {
+    // console.log(editMode);
+    //cleark loading done
+    if (!isLoaded) return;
+
+    /////no edit mode
+    if (!editMode) {
+      setIsLoadingInitialData(false);
+      return;
+    }
+
+    let isMounted = true;
+
+    async function loadInitialData() {
+      try {
+        const result = await getBlogfromUserIdAndBlogId(
+          useridFromParms!,
+          blogIdFromParams!,
+        );
+
+        // console.log(result);
+        if (!result) {
+          //redirect to home page
+          router.push("/home");
+        }
+        if (!isMounted) return;
+
+        setTitleInitialValue(result!.title);
+        setEditorInitialValue(result!.content);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        if (isMounted) setIsLoadingInitialData(false);
+      }
+    }
+
+    loadInitialData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isLoaded, editMode, useridFromParms, blogIdFromParams]);
+
+  useEffect(() => {
+    if (!isLoadingInitialData) {
+      form.reset({ title: titleInitialValue });
+    }
+  }, [isLoadingInitialData, titleInitialValue]);
+
+  useEffect(() => {
+    if (!isLoadingInitialData && editor) {
+      editor.commands.setContent(JSON.parse(editorInitialValue));
+    }
+  }, [isLoadingInitialData, editorInitialValue]);
+
+  ////////////////////////////////////////////////////////////////
 
   const [showSuccess, setShowSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null); // Error state
 
   /////////////////
-  const { isLoaded, userId } = useAuth();
+
   // Define the form schema
   const formSchema = z.object({
     title: z.string().min(1),
@@ -69,7 +138,7 @@ export default function NewSkillPage() {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
+      title: titleInitialValue,
     },
   });
 
@@ -87,7 +156,7 @@ export default function NewSkillPage() {
       }),
     ],
     // 2. Set default content (can be HTML or JSON)
-    content: "<p>Start writing your log...</p>",
+    content: editorInitialValue,
     // 3. Inject your Tailwind classes directly into the editable area
     editorProps: {
       attributes: {
@@ -108,20 +177,22 @@ export default function NewSkillPage() {
     let updatedData = { title: titleData, content: contentData };
 
     try {
-      await createPostAction(updatedData, userId!);
-      // throw Error("failed");
-      setShowSuccess(true);
+      if (editMode) {
+        await updatePost(updatedData, userId!, blogIdFromParams!);
+        // setShowSuccess(true);
+        router.push("/home");
+      } else {
+        await createPostAction(updatedData, userId!);
+        // throw Error("failed");
+        setShowSuccess(true);
+      }
     } catch (error) {
       setErrorMessage(
         "Something went wrong. Please check your connection and try again.",
       );
+      // console.log(error);
     }
   }
-
-  // function handlePublish() {
-  //   const content = editorRef.current?.getContent();
-  //   console.log(content);
-  // }
 
   //////////////////////////////////////////////////
   const handleCloseAndReset = () => {
@@ -129,6 +200,15 @@ export default function NewSkillPage() {
     form.reset({ title: "" }); // Clear the title input
     editor?.commands.setContent("anything new in Mind?"); // Clear the Tiptap edito
   };
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////
+  if (isLoadingInitialData)
+    return (
+      <div className="flex flex-col gap-8 items-center justify-center  ">
+        <SkeletonCard />
+        <SkeletonCard />
+      </div>
+    );
 
   return (
     <>

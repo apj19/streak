@@ -1,5 +1,7 @@
 # Streak
 
+[Demo Link](https://streak-ecru-chi.vercel.app/)
+
 1. Nextjs- simple for deployemnt of fontend and backend
 2. shandcn- so ui will be clean
 3. auth - used clerk for authentication--simple setup

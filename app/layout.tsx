@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/navbar/header";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/sonner";
 
 const notoSansHeading = Noto_Sans({
   subsets: ["latin"],
@@ -56,6 +57,7 @@ export default function RootLayout({
           >
             <Header />
             {children}
+            <Toaster />
           </ThemeProvider>
         </ClerkProvider>
       </body>

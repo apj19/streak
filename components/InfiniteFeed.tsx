@@ -7,6 +7,7 @@ import BlogCard from "./blogCard";
 import { Loader2 } from "lucide-react";
 // Import your individual card component here
 // import BlogCard from './BlogCard';
+import { useUser } from "@clerk/nextjs";
 
 export default function InfiniteFeed({
   initialLogs,
@@ -15,6 +16,10 @@ export default function InfiniteFeed({
   initialLogs: blogCard[];
   userId: string;
 }) {
+  const { user } = useUser();
+
+  const loggedInuserId: string | null | undefined = user?.id;
+
   const [logs, setLogs] = useState<blogCard[]>(initialLogs);
 
   const [hasMore, setHasMore] = useState(initialLogs.length === 5);
@@ -66,6 +71,13 @@ export default function InfiniteFeed({
     return () => observer.disconnect();
   }, [loadMore]);
 
+  //get current user from her and check from props if both matchinh then ownere if not thne public
+  let canEdit: boolean = false;
+
+  if (loggedInuserId == userId) {
+    canEdit = true;
+  }
+
   return (
     <div className="flex flex-col gap-6">
       {logs.map((log) => (
@@ -77,6 +89,7 @@ export default function InfiniteFeed({
             date={log.createdAt}
             blogId={log.id}
             userid={userId}
+            editable={canEdit}
           />
         </div>
       ))}

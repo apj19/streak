@@ -26,7 +26,7 @@ export function CopyLinkButton({ userId }: { userId: string }) {
     // </button>
 
     <Button className="group" onClick={handleCopy}>
-      Copy Share link
+      Share to Public
       <Copy className="transition-transform duration-200 group-hover:translate-x-0.5" />
     </Button>
   );

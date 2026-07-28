@@ -5,6 +5,8 @@ import db from "@/lib/db";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { differenceInCalendarDays } from "date-fns";
+import { safeAction } from "@/lib/safeAction";
+import { ActionError, blogCard } from "@/types/user";
 type bloagData = {
   title: string;
   content: string;
@@ -101,6 +103,46 @@ export async function createPostAction(formData: bloagData, userId: string) {
   // redirect("/home");
 }
 
+export async function updatePost(
+  formData: bloagData,
+  userId: string,
+  blogId: string,
+) {
+  const title = formData.title;
+  const content = formData.content;
+
+  const blog = await db.blog.update({
+    where: {
+      authorId: userId,
+      id: blogId,
+    },
+    data: {
+      title,
+      content,
+      updatedAt: new Date(),
+    },
+  });
+}
+
+export async function getBlogfromUserIdAndBlogId(
+  userId: string,
+  blogId: string,
+) {
+  const bloag = await db.blog.findFirst({
+    where: {
+      authorId: userId,
+      id: blogId,
+    },
+    select: {
+      title: true,
+      content: true,
+      createdAt: true,
+      id: true,
+    },
+  });
+  return bloag;
+}
+
 export async function getTopFiveBloag(userId: string) {
   const bloags = await db.blog.findMany({
     take: 5,
@@ -193,4 +235,14 @@ export async function getuserBlogId(userid: string, blogid: string) {
   });
 
   return blog;
+}
+
+//creating safe actions
+
+export async function getHomePageBlogs(userId: string) {
+  return safeAction<blogCard[]>(async () => {
+    // throw new ActionError("Simulated failure for testing");
+    const bloags = await getTopFiveBloag(userId);
+    return bloags;
+  });
 }
