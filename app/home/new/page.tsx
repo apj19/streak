@@ -133,7 +133,7 @@ export default function NewSkillPage() {
   return (
     <>
       {errorMessage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 backdrop-blur-sm animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-sm animate-in fade-in duration-300">
           <div className="flex flex-col items-center justify-center max-w-md p-8 text-center border-destructive border rounded-xl shadow-lg bg-card">
             <AlertCircle className="w-16 h-16 text-destructive mb-6" />
             <h2 className="text-3xl font-bold tracking-tight mb-2">

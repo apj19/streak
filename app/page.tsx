@@ -19,10 +19,10 @@ export default async function Home() {
 
       <div className="mx-auto max-w-2xl py-40">
         <div className="text-center">
-          <h1 className="text-5xl font-heading tracking-tight text-balance text-white sm:text-7xl">
+          <h1 className="text-5xl font-heading tracking-tight text-balance sm:text-7xl">
             Turn your learning into a public journey.
           </h1>
-          <p className="mt-8 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">
+          <p className="mt-8 text-lg font-medium text-pretty sm:text-xl/8">
             Easily track your study sessions, projects, and lightbulb moments
             all in one organized place. Share your progress link to stay
             accountable and show future employers or peers exactly what you can
