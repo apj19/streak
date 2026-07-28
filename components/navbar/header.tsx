@@ -10,7 +10,7 @@ export default async function Header() {
   const { userId } = await auth();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky px-8 top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-14 items-center justify-between px-2 max-w-7xl mx-auto w-full">
         {/* Left Side: Brand Heading */}
         <div className="flex items-center gap-2">

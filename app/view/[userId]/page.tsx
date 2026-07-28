@@ -1,9 +1,8 @@
-import { getTopFiveBloag, getuserBlogs } from "@/app/action";
-import BlogCard from "@/components/blogCard";
+import { getuserBlogs } from "@/app/action";
+
 import InfiniteFeed from "@/components/InfiniteFeed";
+import Streak from "@/components/Streak";
 import { blogCard } from "@/types/user";
-import { IconCircleChevronsDownFilled } from "@tabler/icons-react";
-import { notFound } from "next/navigation";
 
 // Next.js automatically passes the URL parameters to this component
 export default async function PublicProfilePage({
@@ -22,15 +21,7 @@ export default async function PublicProfilePage({
     <main className="max-w-2xl mx-auto p-8 ">
       {/* Feed Section */}
       <div className="flex flex-col gap-8 justify-center items-center">
-        {/* {blogs.map((e) => (
-          <BlogCard
-            key={e.id}
-            title={e.title}
-            date={e.createdAt.toISOString()}
-            content={e.content}
-          />
-        ))} */}
-
+        <Streak userId={userId} />
         <InfiniteFeed userId={userId} initialLogs={blogs} />
       </div>
     </main>

@@ -6,11 +6,16 @@ import { MenuBar } from "./MenuBar";
 
 import { forwardRef, useImperativeHandle } from "react";
 
-export interface EditorRef {
-  getContent: () => string;
+// export interface EditorRef {
+//   getContent: () => string;
+// }
+interface Props {
+  data: string;
 }
 
-const TiptapEditor = forwardRef<EditorRef>((props, ref) => {
+const TiptapEditor = ({ data }: Props) => {
+  const editorContent = JSON.parse(data);
+  // console.log(editorContent);
   const editor = useEditor({
     // 1. Load the extensions
     extensions: [
@@ -21,31 +26,26 @@ const TiptapEditor = forwardRef<EditorRef>((props, ref) => {
       }),
     ],
     // 2. Set default content (can be HTML or JSON)
-    content: "<p>Start writing your log...</p>",
+    content: editorContent || "failed to load",
     // 3. Inject your Tailwind classes directly into the editable area
     editorProps: {
       attributes: {
-        class: "max-w-none w-full min-h-[400px] p-4 sm:p-6 md:p-8 outline-none",
+        class: "max-w-none w-full p-4 sm:p-6 md:p-8 outline-none",
       },
     },
+    editable: false,
   });
 
-  useImperativeHandle(ref, () => ({
-    getContent: () => {
-      const json = editor?.getJSON();
-
-      return JSON.stringify(json) || "";
-    },
-  }));
+  // console.log(data);
 
   return (
     // This is the outer container wrapper we styled earlier
-    <div className="w-full rounded-xl border  shadow-sm  ">
-      {editor && <MenuBar editor={editor} />}
+    <div className="w-full  md:min-w-3xl ">
+      {/* {editor && <MenuBar editor={editor} />} */}
 
       <EditorContent editor={editor} />
     </div>
   );
-});
+};
 
 export default TiptapEditor;

@@ -10,6 +10,7 @@ import { blogCard } from "@/types/user";
 import { CopyLinkButton } from "@/components/copyLinkBtn";
 import InfiniteFeed from "@/components/InfiniteFeed";
 import { StreakActivity } from "@/components/streakActivity";
+import Streak from "@/components/Streak";
 
 export default async function Home() {
   const user = await currentUser();
@@ -37,12 +38,12 @@ export default async function Home() {
 
   const blogs: blogCard[] = await getTopFiveBloag(user.id);
   // console.log(blogs);
-  const states = (await getStates(user.id)) || {
-    currentStreak: 0,
-    longestStreak: 0,
-    totalDays: 0,
-    lastLogDate: null,
-  };
+  // const states = (await getStates(user.id)) || {
+  //   currentStreak: 0,
+  //   longestStreak: 0,
+  //   totalDays: 0,
+  //   lastLogDate: null,
+  // };
 
   return (
     // <div className="flex flex-col items-center justify-center flex-1 bg-zinc-50 dark:bg-black p-6">
@@ -55,11 +56,12 @@ export default async function Home() {
     // </div>
     <main className="max-w-2xl mx-auto p-8 ">
       {/* Header Section */}
-      <StreakActivity
+      {/* <StreakActivity
         currentStreak={states.currentStreak}
         longestStreak={states.longestStreak}
         totalDays={states.totalDays}
-      />
+      /> */}
+      <Streak userId={user.id} />
 
       <div className="flex flex-col items-center justify-between my-12 border-b border-t py-6 gap-4">
         <h3 className="text-2xl font-heading">What did you learn today?</h3>

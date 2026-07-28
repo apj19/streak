@@ -1,3 +1,7 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+import Link from "next/link";
+
 interface blogCardProps {
   title: string;
   date: Date;
@@ -5,11 +9,7 @@ interface blogCardProps {
   userid: string;
 }
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-import Link from "next/link";
-
-export default async function BlogCard({
+export default function BlogCard({
   title,
   date,
   blogId,

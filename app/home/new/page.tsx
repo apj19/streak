@@ -44,7 +44,7 @@ import dynamic from "next/dynamic";
 import Confetti from "react-confetti";
 
 // const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
-import Editor, { EditorRef } from "@/components/Editor";
+
 import { useRef } from "react";
 import Link from "next/link";
 import { useState } from "react";
@@ -52,7 +52,7 @@ import PublishedBlog from "@/components/PublishedBlog";
 import { MenuBar } from "@/components/MenuBar";
 
 export default function NewSkillPage() {
-  const editorRef = useRef<EditorRef>(null);
+  // const editorRef = useRef<EditorRef>(null);
 
   const [showSuccess, setShowSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null); // Error state
@@ -100,8 +100,10 @@ export default function NewSkillPage() {
     //grabbing tile and content
 
     let titleData = data.title;
+
     const contentData =
-      editorRef.current?.getContent() || "what you learing today";
+      JSON.stringify(editor?.getJSON()) || "what are you leaning today";
+
     // console.log(content);
     let updatedData = { title: titleData, content: contentData };
 

@@ -177,3 +177,20 @@ export async function getStates(userId: string) {
   });
   return states;
 }
+
+export async function getuserBlogId(userid: string, blogid: string) {
+  const blog = await db.blog.findUnique({
+    where: {
+      authorId: userid,
+      id: blogid,
+    },
+    select: {
+      title: true,
+      content: true,
+      createdAt: true,
+      id: true,
+    },
+  });
+
+  return blog;
+}
